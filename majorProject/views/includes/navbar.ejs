@@ -4,9 +4,10 @@
     color: white;
     border-radius: 25px;
     padding: 0 1rem 0 1rem;
+    white-space: nowrap;
   }
   .search-btn:hover{
-    background-color: #fe424d;
+    background-color: #d63a45;
     color: white;
   }
   .search-btn i {
@@ -17,6 +18,25 @@
     border-radius: 25px;
     padding: 0.5rem 3rem 0.5rem 3rem;
     font-size: 0.9rem;
+    min-width: 280px;
+  }
+
+  @media (max-width: 768px) {
+    form.d-flex {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+    .search-input {
+        width: 100%;
+        min-width: unset;
+        padding: 0.5rem 1rem;
+    }
+    .search-btn {
+        width: auto;
+        align-self: flex-start;
+        padding: 0.5rem 1.5rem;
+    }
   }
 </style>
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
@@ -30,9 +50,20 @@
         <a class="nav-link" href="/listings">Explore</a>
       </div>
       <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-input" type="search" placeholder="Search destinations" />
-          <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        <form class="d-flex" role="search" action="/listings" method="GET">
+          <input
+            class="form-control me-2 search-input"
+            type="search"
+            name="search"
+            placeholder="Search destinations, cities..."
+            value="<%= typeof currentSearch !== 'undefined' ? currentSearch : '' %>"
+          />
+          <% if (typeof currentCategory !== 'undefined' && currentCategory) { %>
+            <input type="hidden" name="category" value="<%= currentCategory %>" />
+          <% } %>
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
         </form>
       </div>
       <div class="navbar-nav ms-auto">

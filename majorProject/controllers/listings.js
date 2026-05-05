@@ -4,8 +4,29 @@ config.apiKey = process.env.MAPTILER_KEY;
 
 
 module.exports.index = async (req,res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", {allListings});
+  const { search, category } = req.query;
+  let filter = {};
+
+  if (category && category.trim() !== "") {
+    filter.category = { $regex: new RegExp(`^${category.trim()}$`, "i") };
+  }
+
+  if (search && search.trim() !== "") {
+    const searchRegex = new RegExp(search.trim(), "i");
+    filter.$or = [
+      { title:    searchRegex },
+      { location: searchRegex },
+      { country:  searchRegex },
+      { description: searchRegex },
+    ];
+  }
+
+  const allListings = await Listing.find(filter);
+  res.render("listings/index.ejs", {
+      allListings,
+      currentSearch:    search    || "",
+      currentCategory:  category  || "",
+  });
 };
 
 module.exports.renderNewForm = (req,res) => {

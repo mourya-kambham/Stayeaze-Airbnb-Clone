@@ -1,4 +1,16 @@
 <% layout("/layouts/boilerplate") %>
+<style>
+@media (max-width: 768px) {
+    .col-8.offset-2 {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 1rem;
+    }
+    .col-md-4, .col-md-8 {
+        width: 100% !important;
+    }
+}
+</style>
 <body>
     <div class="row mt-3">
         <div class="col-8 offset-2">
@@ -21,6 +33,32 @@
                 <div class="mb-3">
                     <label for="image" class="form-label">Upload New Image</label>
                     <input name="listing[image][url]" type="file" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="listing[category]" class="form-select">
+                        <option value="">-- No category --</option>
+                        <%
+                          const cats = [
+                            { val: "Trending",      label: "Trending" },
+                            { val: "Rooms",         label: "Rooms" },
+                            { val: "Iconic Cities", label: "Iconic Cities" },
+                            { val: "Mountains",     label: "Mountains" },
+                            { val: "Castles",       label: "Castles" },
+                            { val: "Amazing Pools", label: "Amazing Pools" },
+                            { val: "Camping",       label: "Camping" },
+                            { val: "Farms",         label: "Farms" },
+                            { val: "Arctic",        label: "Arctic" },
+                            { val: "Tents",         label: "Tents" },
+                            { val: "Hotel",         label: "Hotel" },
+                          ];
+                          for(let c of cats){
+                        %>
+                        <option value="<%= c.val %>" <%= listing.category === c.val ? "selected" : "" %>>
+                            <%= c.label %>
+                        </option>
+                        <% } %>
+                    </select>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4">

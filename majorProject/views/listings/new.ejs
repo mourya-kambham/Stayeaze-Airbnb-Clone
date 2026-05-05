@@ -1,4 +1,16 @@
 <% layout("/layouts/boilerplate") %>
+<style>
+@media (max-width: 768px) {
+    .col-8.offset-2 {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 1rem;
+    }
+    .col-md-4, .col-md-8 {
+        width: 100% !important;
+    }
+}
+</style>
 <body>
     <div class="row mt-3">
         <div class="col-8 offset-2">
@@ -18,6 +30,23 @@
                     <label for="image" class="form-label">Upload Listing Image</label>
                     <input name="listing[image][url]" type="file" class="form-control">
                     required
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="listing[category]" class="form-select">
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Trending">Trending</option>
+                        <option value="Rooms">Rooms</option>
+                        <option value="Iconic Cities">Iconic Cities</option>
+                        <option value="Mountains">Mountains</option>
+                        <option value="Castles">Castles</option>
+                        <option value="Amazing Pools">Amazing Pools</option>
+                        <option value="Camping">Camping</option>
+                        <option value="Farms">Farms</option>
+                        <option value="Arctic">Arctic</option>
+                        <option value="Tents">Tents</option>
+                        <option value="Hotel">Hotel</option>
+                    </select>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4">

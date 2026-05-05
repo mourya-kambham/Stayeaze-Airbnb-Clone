@@ -11,13 +11,22 @@
             margin-right: 2rem;
             margin-top: 2rem;
             opacity: 0.7;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.2s;
         }
         .filter:hover{
             opacity: 1;
-            cursor: pointer;
+        }
+        .filter.active-filter {
+            opacity: 1;
+            border-bottom: 2px solid #fe424d;
+            padding-bottom: 4px;
         }
         .filter p {
             font-size: 0.8rem;
+            margin-bottom: 0;
         }
         .tax-info{
             display: none;
@@ -27,57 +36,81 @@
             border-radius: 1rem;
             height: 2.5rem;
             padding: 1rem;
-            margin-left: 2rem;
+            margin-left: auto;
+            margin-top: 2rem;
             display: flex;
             align-items: center;
         }
+        .filter-banner {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .clear-btn {
+            font-size: 0.8rem;
+            color: #fe424d;
+            text-decoration: none;
+            border: 1px solid #fe424d;
+            border-radius: 20px;
+            padding: 2px 10px;
+        }
+        .clear-btn:hover { background: #fe424d; color: white; }
+        @media (max-width: 768px) {
+            #filters {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            .filter {
+                min-width: 70px;
+                margin-right: 1rem;
+                margin-top: 1rem;
+            }
+            .tax-toggle {
+                min-width: 220px;
+                margin-left: 1rem;
+                margin-top: 1rem;
+            }
+        }
     </style>
+
     <div id="filters">
-        <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-bed"></i></div>
-            <p>Rooms</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain"></i></div>
-            <p>Mountains</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castles</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing Pools</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Camping</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-cow"></i></div>
-            <p>Farms</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-regular fa-snowflake"></i></div>
-            <p>Arctic</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-tents"></i></div>
-            <p>Tents</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-hotel"></i></div>
-            <p>Hotel</p>
-        </div>
-        
+        <%
+          const categories = [
+            { label: "Trending",      icon: "fa-solid fa-fire" },
+            { label: "Rooms",         icon: "fa-solid fa-bed" },
+            { label: "Iconic Cities", icon: "fa-solid fa-mountain-city" },
+            { label: "Mountains",     icon: "fa-solid fa-mountain" },
+            { label: "Castles",       icon: "fa-brands fa-fort-awesome" },
+            { label: "Amazing Pools", icon: "fa-solid fa-person-swimming" },
+            { label: "Camping",       icon: "fa-solid fa-campground" },
+            { label: "Farms",         icon: "fa-solid fa-cow" },
+            { label: "Arctic",        icon: "fa-regular fa-snowflake" },
+            { label: "Tents",         icon: "fa-solid fa-tents" },
+            { label: "Hotel",         icon: "fa-solid fa-hotel" },
+          ];
+        %>
+
+        <% for(let cat of categories) { %>
+            <%
+              // Build the href: toggle off if already active, else apply
+              let isActive = (typeof currentCategory !== 'undefined' && currentCategory === cat.label);
+              // Preserve any active search term
+              let searchParam = (typeof currentSearch !== 'undefined' && currentSearch)
+                                  ? `&search=${encodeURIComponent(currentSearch)}`
+                                  : "";
+              let href = isActive
+                          ? `/listings?${searchParam}`           // clicking again clears the filter
+                          : `/listings?category=${encodeURIComponent(cat.label)}${searchParam}`;
+            %>
+            <a href="<%= href %>" class="filter <%= isActive ? 'active-filter' : '' %>">
+                <div><i class="<%= cat.icon %>"></i></div>
+                <p><%= cat.label %></p>
+            </a>
+        <% } %>
+
         <div class="tax-toggle">
             <div class="form-check-reverse form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -85,7 +118,34 @@
             </div>
         </div>
     </div>
+
+    <% if ((typeof currentSearch !== 'undefined' && currentSearch) || (typeof currentCategory !== 'undefined' && currentCategory)) { %>
+    <div class="filter-banner">
+        <% if (typeof currentCategory !== 'undefined' && currentCategory) { %>
+            <span class="badge rounded-pill" style="background:#fe424d; font-size:0.85rem;">
+                Category: <%= currentCategory %>
+            </span>
+        <% } %>
+        <% if (typeof currentSearch !== 'undefined' && currentSearch) { %>
+            <span class="badge rounded-pill bg-secondary" style="font-size:0.85rem;">
+                Search: "<%= currentSearch %>"
+            </span>
+        <% } %>
+        <a href="/listings" class="clear-btn">✕ Clear all</a>
+        <span class="text-muted" style="font-size:0.85rem;">
+            <%= allListings.length %> listing<%= allListings.length !== 1 ? 's' : '' %> found
+        </span>
+    </div>
+    <% } %>
+
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        <% if (allListings.length === 0) { %>
+            <div class="col-12 text-center py-5">
+                <i class="fa-solid fa-magnifying-glass fa-3x text-muted mb-3"></i>
+                <p class="text-muted fs-5">No listings found. Try a different search or category.</p>
+                <a href="/listings" class="btn btn-outline-danger mt-2">Browse all listings</a>
+            </div>
+        <% } %>
         <% for(let listing of allListings){ %>
         <a href="/listings/<%= listing._id %>" class="listing-link">
         <div class="card col listing-card">
@@ -93,7 +153,13 @@
             <div class="card-img-overlay"></div>
             <div class="card-body">
                 <p class="card-text">
-                    <b><%= listing.title %></b> <br>
+                    <b><%= listing.title %></b>
+                    <% if (listing.category) { %>
+                        <span class="badge rounded-pill" style="background:#fe424d; font-size:0.7rem; vertical-align:middle;">
+                            <%= listing.category %>
+                        </span>
+                    <% } %>
+                    <br>
                     &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
                     <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
                 </p>
@@ -102,6 +168,7 @@
         </a>
         <% } %>
     </div>
+
     <script>
         let taxSwitch = document.getElementById("switchCheckDefault");
         taxSwitch.addEventListener("click", () => {
@@ -116,4 +183,3 @@
         });
     </script>
 </body>
-
