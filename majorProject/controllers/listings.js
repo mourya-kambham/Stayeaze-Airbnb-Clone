@@ -2,6 +2,9 @@ const Listing = require("../models/listing");
 const {geocoding, staticMaps, coordinates, config} = require('@maptiler/client');
 config.apiKey = process.env.MAPTILER_KEY;
 
+module.exports.redirectToListings = (req,res) => {
+  res.redirect("/listings");
+}
 
 module.exports.index = async (req,res) => {
   const { search, category } = req.query;

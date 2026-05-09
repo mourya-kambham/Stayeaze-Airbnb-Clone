@@ -57,7 +57,7 @@
             padding: 2px 10px;
         }
         .clear-btn:hover { background: #fe424d; color: white; }
-        @media (max-width: 768px) {
+        @media (max-width: 576px) {
             #filters {
                 flex-wrap: nowrap;
                 overflow-x: auto;
@@ -68,9 +68,17 @@
                 margin-right: 1rem;
                 margin-top: 1rem;
             }
+            .listing-card .card-img-top{
+                height: 14rem;
+            }
+            .row > a.listing-link{
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+            }
             .tax-toggle {
-                min-width: 220px;
-                margin-left: 1rem;
+                width: 100%;
+                margin-left: 0;
                 margin-top: 1rem;
             }
         }
@@ -148,8 +156,8 @@
         <% } %>
         <% for(let listing of allListings){ %>
         <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card">
-            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+        <div class="card listing-card">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image">
             <div class="card-img-overlay"></div>
             <div class="card-body">
                 <p class="card-text">

@@ -52,11 +52,13 @@ body{
 
 /*Cards*/
 .listing-card{
+    width: 100%;
     border: none !important;
     margin-bottom: 2rem;
 }
 
-.card-img-top{
+.listing-card .card-img-top{
+    height: 18rem;
     border-radius: 1rem !important;
     width: 100% !important;
     object-fit: cover !important;
@@ -72,6 +74,8 @@ body{
 
 .listing-link{
     text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .card-img-overlay{

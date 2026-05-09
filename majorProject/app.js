@@ -58,9 +58,9 @@ const sessionOptions = {
 }; 
 
 //Root Route
-/*app.get("/", (req,res) => {
-    res.send("Route is working");
-});*/
+app.get("/", (req,res) => {
+    res.redirect("/listings");
+});
 
 app.use(session(sessionOptions));
 app.use(flash());
